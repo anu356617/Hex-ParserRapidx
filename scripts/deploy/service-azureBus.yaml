@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-service-bus
+spec:
+  selector:
+    app: azure-service-bus
+  ports:
+    - protocol: TCP
+      port: 5671
+      targetPort: 5671
