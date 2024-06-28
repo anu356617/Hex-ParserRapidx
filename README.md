@@ -51,3 +51,50 @@ helm upgrade my-release ./dev-chart
 helm uninstall my-release
 
 kubectl get pvc
+
+
+
+azure cli
+
+sudo apt update
+sudo apt install azure-cli
+azure --version
+azure login
+az account list --output table
+az account set --subscription <subscription-id-or-name>
+
+inside ACR
+ az acr login --name rapidxccdev
+
+image build
+docker image prune -f
+
+docker build -t rapidxccdev.azurecr.io/eventservice:latest .
+docker images
+<!-- docker tag eventservice:latest rapidxccdev.azurecr.io/eventservice:latest -->
+docker push rapidxccdev.azurecr.io/eventservice:latest
+
+docker run -d --name my-eventservice \
+    rapidxccdev.azurecr.io/eventservice:latest
+
+
+docker rmi rapidxccdev.azurecr.io/eventservice:latest
+az acr update -n rapidxccdev --admin-enabled true
+
+ACR_USERNAME=$(az acr credential show -n rapidxccdev --query "username" -o tsv)
+ACR_PASSWORD=$(az acr credential show -n rapidxccdev --query "passwords[0].value" -o tsv)
+
+
+kubectl create secret docker-registry acr-credentials \
+  --docker-server=rapidxccdev.azurecr.io \
+  --docker-username=$ACR_USERNAME \
+  --docker-password=$ACR_PASSWORD \
+  --docker-email=<your-email@example.com>
+
+
+
+KEDA
+helm repo add kedacore https://kedacore.github.io/charts
+ helm repo update
+ helm install keda kedacore/keda
+  kubectl get pods -n keda

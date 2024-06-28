@@ -2,7 +2,7 @@
 FROM python:3.9-slim
 
 # Set the working directory in the container
-WORKDIR /app-codescout/eventservice
+WORKDIR /eventservice
 
 # Install git and other necessary dependencies
 RUN apt-get update && \
@@ -16,8 +16,13 @@ COPY requirements.txt .
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the current directory contents into the container at /app-codescout/eventservice
+# Copy the current directory contents into the container at 
 COPY . .
 
-# Run eventservice.py when the container launches
-CMD ["python", "eventservice.py"]
+ENV ENVIRONMENT=development
+
+# Copy .env file for development
+COPY .env .
+
+# Run app.py when the container launches
+CMD ["python", "app.py"]
