@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-pv
+spec:
+  capacity:
+    storage: 1Gi  # Adjust size as needed
+  accessModes:
+    - ReadWriteOnce
+  azureFile:
+    secretName: azure-storage-secret
+    shareName: <file-share-name>
+    readOnly: false
+  persistentVolumeReclaimPolicy: Retain
