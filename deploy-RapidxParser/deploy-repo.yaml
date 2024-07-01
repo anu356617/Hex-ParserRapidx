@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reposervice
+  labels:
+    app: reposervice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reposervice
+  template:
+    metadata:
+      labels:
+        app: reposervice
+    spec:
+      containers:
+      - name: reposervice
+        image: rapidxccdev.azurecr.io/reposervice:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENVIRONMENT
+          value: dev
+        - name: NEO4j_URI
+          value: bolt://codescout-neo4j-dev.southindia.cloudapp.azure.com:7687/neo4j
+        - name: NEO4j_USERNAME
+          value: neo4j
+        - name: NEO4j_PASSWORD
+          value: Codescout123
+        - name: FILE_PARSE_QUEUE_NAME
+          value: fileParseQueue
+        - name: FILE_PARSE_COMPLETE_QUEUE_NAME
+          value: fileParseCompleteQueue
+        - name: EVENT_LOG_QUEUE_NAME
+          value: eventLogQueue
+        - name: REPO_PARSE_COMPLETE_QUEUE_NAME
+          value: repoParseCompleteQueue
+        - name: FUNTION_LINKING_COMPLETE_QUEUE_NAME
+          value: functionLinkingCompleteQueue
+        volumeMounts:
+        - name: storage
+          mountPath: /mnt/storage
+
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: azure-file-pvc
+
+      imagePullSecrets:
+      - name: acr-credentials

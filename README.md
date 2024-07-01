@@ -50,8 +50,8 @@ helm package ./my-chart
 helm upgrade my-release ./dev-chart
 helm uninstall my-release
 
-kubectl get pvc
 
+kubectl get pvc
 
 
 azure cli
@@ -68,17 +68,21 @@ inside ACR
 
 image build
 docker image prune -f
-
-docker build -t rapidxccdev.azurecr.io/eventservice:latest .
+docker ps -a
+dockr stop 
+docker rm 
+docker build -t rapidxccdev.azurecr.io/reposervice:latest .
 docker images
 <!-- docker tag eventservice:latest rapidxccdev.azurecr.io/eventservice:latest -->
-docker push rapidxccdev.azurecr.io/eventservice:latest
+docker push rapidxccdev.azurecr.io/reposervice:latest
+docker images | grep rapidxccdev.azurecr.io/reposervice
+docker inspect rapidxccdev.azurecr.io/monitorservice:latest
 
-docker run -d --name my-eventservice \
-    rapidxccdev.azurecr.io/eventservice:latest
+docker run -d --name my-linkerservice rapidxccdev.azurecr.io/linkerservice:latest
 
+kubectl get deployment monitorservice -o yaml
 
-docker rmi rapidxccdev.azurecr.io/eventservice:latest
+docker rmi rapidxccdev.azurecr.io/monitorservice:latest
 az acr update -n rapidxccdev --admin-enabled true
 
 ACR_USERNAME=$(az acr credential show -n rapidxccdev --query "username" -o tsv)

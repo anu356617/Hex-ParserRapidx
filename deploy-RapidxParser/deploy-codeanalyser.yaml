@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analyserservice
+  labels:
+    app: analyserservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analyserservice
+  template:
+    metadata:
+      labels:
+        app: analyserservice
+    spec:
+      containers:
+      - name: analyserservice
+        image: rapidxccdev.azurecr.io/analyserservice:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENVIRONMENT
+          value: dev
+        - name: POSTGRES_URL
+          value: postgresql+psycopg2://citus:Codescout123@c-gen-ai-test-db.xyr2br6ljuwsr7.postgres.cosmos.azure.com:6432/rapidx
+        - name: RABBITMQ_URL
+          value: amqps://lxptmxtz:xuBCHtJkSOBnUUHYcI8hht9A3uw1G_Dy@puffin-01.rmq2.cloudamqp.com/lxptmxtz
+        - name: NEO4j_URI
+          value: bolt://codescout-neo4j-dev.southindia.cloudapp.azure.com:7687/neo4j
+        - name: NEO4j_USERNAME
+          value: neo4j
+        - name: NEO4j_PASSWORD
+          value: Codescout123
+        - name: FUNCTION_LINKING_COMPLETE_QUEUE_NAME
+          value: functionLinkingCompleteQueue
+        - name: ANALYSIS_COMPLETE_QUEUE_NAME
+          value: analysisCompleteQueue
+        - name: EVENT_LOG_QUEUE_NAME
+          value: eventLogQueue
+        - name: MODEL_PROVIDER
+          value: azure
+        - name: AZURE_OPENAI_ENDPOINT
+          value: https://devproductivity-ai-lab.openai.azure.com/
+        - name: OPENAI_API_KEY
+          value: fe22a82aa3fb4af3a7986e87a8c04761
+        - name: OPENAI_API_TYPE
+          value: azure
+        - name: OPENAI_API_VERSION
+          value: 2024-03-01-preview
+
+      imagePullSecrets:
+      - name: acr-credentials

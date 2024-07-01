@@ -1,0 +1,62 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: trigger-auth-rabbitmq-repo
+spec:
+  secretTargetRef:
+  - parameter: host
+    name: rabbitmq-secret
+    key: host
+
+---
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: reposervice-scaledobject
+spec:
+  cooldownPeriod: 120
+  scaleTargetRef:
+    name: reposervice  # Replace with your deployment name
+    kind: Deployment
+  triggers:
+  - type: rabbitmq
+    metadata:
+      protocol: amqp
+      queueName: fileParseQueue
+      mode: QueueLength
+      value: "10"
+    authenticationRef:
+      name: trigger-auth-rabbitmq-repo
+  - type: rabbitmq
+    metadata:
+      protocol: amqp
+      queueName: fileParseCompleteQueue
+      mode: QueueLength
+      value: "10"
+    authenticationRef:
+      name: trigger-auth-rabbitmq-repo
+  - type: rabbitmq
+    metadata:
+      protocol: amqp
+      queueName: eventLogQueue 
+      mode: QueueLength
+      value: "10"
+    authenticationRef:
+      name: trigger-auth-rabbitmq-repo
+  - type: rabbitmq
+    metadata:
+      protocol: amqp
+      queueName: repoParseCompleteQueue 
+      mode: QueueLength
+      value: "10"
+    authenticationRef:
+      name: trigger-auth-rabbitmq-repo
+  - type: rabbitmq
+    metadata:
+      protocol: amqp
+      queueName: functionLinkingCompleteQueue 
+      mode: QueueLength
+      value: "10"
+    authenticationRef:
+      name: trigger-auth-rabbitmq-repo

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkerservice
+  labels:
+    app: linkerservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkerservice
+  template:
+    metadata:
+      labels:
+        app: linkerservice
+    spec:
+      containers:
+      - name: linkerservice
+        image: rapidxccdev.azurecr.io/linkerservice:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENVIRONMENT
+          value: dev
+        - name: NEO4j_URI
+          value: bolt://codescout-neo4j-dev.southindia.cloudapp.azure.com:7687/neo4j
+        - name: NEO4j_USERNAME
+          value: neo4j
+        - name: NEO4j_PASSWORD
+          value: Codescout123
+        - name: FILE_PARSE_QUEUE_NAME
+          value: fileParseQueue
+        - name: FILE_PARSE_COMPLETE_QUEUE_NAME
+          value: fileParseCompleteQueue
+        - name: EVENT_LOG_QUEUE_NAME
+          value: eventLogQueue
+        - name: REPO_PARSE_COMPLETE_QUEUE_NAME
+          value: repoParseCompleteQueue
+        - name: FUNTION_LINKING_COMPLETE_QUEUE_NAME
+          value: functionLinkingCompleteQueue
+
+      imagePullSecrets:
+      - name: acr-credentials
