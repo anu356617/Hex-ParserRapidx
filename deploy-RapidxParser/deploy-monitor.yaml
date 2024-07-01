@@ -17,13 +17,14 @@ spec:
       containers:
       - name: monitorservice
         image: rapidxccdev.azurecr.io/monitorservice:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
         env:
         - name: ENVIRONMENT
           value: dev
         - name: POSTGRES_URL
-          value: postgresql+psycopg2://citus:Codescout123@c-gen-ai-test-db.xyr2br6ljuwsr7.postgres.cosmos.azure.com:6432/rapidx
+          value: postgresql+psycopg://citus:Codescout123@c-gen-ai-test-db.xyr2br6ljuwsr7.postgres.cosmos.azure.com:6432/rapidx
         - name: RABBITMQ_URL
           value: amqps://lxptmxtz:xuBCHtJkSOBnUUHYcI8hht9A3uw1G_Dy@puffin-01.rmq2.cloudamqp.com/lxptmxtz
         - name: NEO4j_URI

@@ -16,12 +16,21 @@ spec:
     spec:
       containers:
       - name: linkerservice
-        image: rapidxccdev.azurecr.io/linkerservice:latest
+        image: rapidxccdev.azurecr.io/linkerservice1:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
         env:
         - name: ENVIRONMENT
           value: dev
+        - name: POSTGRES_CONN_STR
+          value: postgresql://citus:{password}@c-gen-ai-test-db.xyr2br6ljuwsr7.postgres.cosmos.azure.com:6432/rapidx?sslmode=require
+        - name: POSTGRES_PWD
+          value: Codescout123
+        - name: POSTGRES_URL
+          value: postgresql+psycopg://citus:Codescout123@c-gen-ai-test-db.xyr2br6ljuwsr7.postgres.cosmos.azure.com:6432/rapidx
+        - name: RABBITMQ_URL
+          value: amqps://lxptmxtz:xuBCHtJkSOBnUUHYcI8hht9A3uw1G_Dy@puffin-01.rmq2.cloudamqp.com/lxptmxtz
         - name: NEO4j_URI
           value: bolt://codescout-neo4j-dev.southindia.cloudapp.azure.com:7687/neo4j
         - name: NEO4j_USERNAME

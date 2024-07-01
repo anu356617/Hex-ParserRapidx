@@ -52,7 +52,8 @@ helm uninstall my-release
 
 
 kubectl get pvc
-
+kubectl get scaledObjects
+kubectl  describe scaledobject analyserservice-scaledobject
 
 azure cli
 
@@ -71,10 +72,10 @@ docker image prune -f
 docker ps -a
 dockr stop 
 docker rm 
-docker build -t rapidxccdev.azurecr.io/reposervice:latest .
+docker build -t rapidxccdev.azurecr.io/eventlogservice:latest .
 docker images
 <!-- docker tag eventservice:latest rapidxccdev.azurecr.io/eventservice:latest -->
-docker push rapidxccdev.azurecr.io/reposervice:latest
+docker push rapidxccdev.azurecr.io/eventlogservice:latest
 docker images | grep rapidxccdev.azurecr.io/reposervice
 docker inspect rapidxccdev.azurecr.io/monitorservice:latest
 
