@@ -15,7 +15,7 @@ kind delete cluster --name <cluster-name>
 
 
 AKS
-az aks get-credentials --resource-group <resource-group> --name <cluster-name>
+az aks get-credentials --resource-group rg-rapidx-dev --name aks-rapidx-dev
 
 
 helm install
@@ -59,8 +59,8 @@ azure cli
 
 sudo apt update
 sudo apt install azure-cli
-azure --version
-azure login
+az --version
+az login
 az account list --output table
 az account set --subscription <subscription-id-or-name>
 
@@ -72,14 +72,14 @@ docker image prune -f
 docker ps -a
 dockr stop 
 docker rm 
-docker build -t rapidxccdev.azurecr.io/eventlogservice:latest .
+docker build -t rapidxccdev.azurecr.io/linkerservice:deploy1 .
 docker images
-<!-- docker tag eventservice:latest rapidxccdev.azurecr.io/eventservice:latest -->
-docker push rapidxccdev.azurecr.io/eventlogservice:latest
+docker push rapidxccdev.azurecr.io/linkerservice:deploy1
 docker images | grep rapidxccdev.azurecr.io/reposervice
 docker inspect rapidxccdev.azurecr.io/monitorservice:latest
+az acr login --name rapidxccdev
 
-docker run -d --name my-linkerservice rapidxccdev.azurecr.io/linkerservice:latest
+docker run --env-file /workspaces/Hex-ParserRapidx/app-codescout/Parser2.0/function_linker_service/env  rapidxccdev.azurecr.io/linkerservice:rapidx3
 
 kubectl get deployment monitorservice -o yaml
 
@@ -103,3 +103,16 @@ helm repo add kedacore https://kedacore.github.io/charts
  helm repo update
  helm install keda kedacore/keda
   kubectl get pods -n keda
+
+
+sudo apt-get install rabbitmq-server
+sudo rabbitmq-plugins enable rabbitmq_management
+sudo service rabbitmq-server restart
+
+
+sudo wget http://20.235.130.225:15672/cli/rabbitmqadmin
+sudo chmod +x rabbitmqadmin
+sudo mv rabbitmqadmin /usr/local/bin/
+rabbitmqadmin list queues -H 20.235.130.225 -P 15672 -u rapidx -p Password123 -V /
+
+rabbitmqadmin purge queue name=repoAnalyserQueue -H 20.235.130.225 -P 15672 -u rapidx -p Password123 -V /
